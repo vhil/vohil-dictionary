@@ -16,27 +16,27 @@
 		public DictionaryCache()
 			: base("Pintle.Dictionary.Cache", Settings.Caching.DefaultDataCacheSize)
 		{
-			Event.Subscribe("publish:end", new EventHandler(this.OnPublishEnd));
-			Event.Subscribe("publish:end:remote", new EventHandler(this.OnPublishEnd));
+			Event.Subscribe("publish:end", this.OnPublishEnd);
+			Event.Subscribe("publish:end:remote", this.OnPublishEnd);
 		}
 
-		public string Get(string key)
+		public string Get(string key, string language)
 		{
-			key = GenerateCacheKey(key);
+			key = GenerateCacheKey(key, language);
 
 			return this.GetString(key);
 		}
 
-		public void Set(string key, string value)
+		public void Set(string key, string language, string value)
 		{
-			key = GenerateCacheKey(key);
+			key = GenerateCacheKey(key, language);
 
 			this.SetString(key, value);
 		}
 
-		private static string GenerateCacheKey(string key)
+		private static string GenerateCacheKey(string key, string language)
 		{
-			return $"{key}_{Sitecore.Context.Language?.Name}";
+			return $"{key}_{language}";
 		}
 
 		private void OnPublishEnd(object sender, EventArgs e)

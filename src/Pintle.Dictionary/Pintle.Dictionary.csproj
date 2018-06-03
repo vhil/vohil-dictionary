@@ -103,6 +103,9 @@
     <Reference Include="Sitecore.Kernel, Version=11.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Sitecore.Kernel.NoReferences.9.0.171219\lib\NET462\Sitecore.Kernel.dll</HintPath>
     </Reference>
+    <Reference Include="Sitecore.Mvc, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.Mvc.NoReferences.9.0.171219\lib\NET462\Sitecore.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -140,12 +143,15 @@
     <Compile Include="DictionaryItemRepository.cs" />
     <Compile Include="DictionaryService.cs" />
     <Compile Include="DictionaryServiceFactory.cs" />
+    <Compile Include="Extensions\SitecoreHelperExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IDictionaryService.cs" />
     <Compile Include="Messaging\DictionaryItemMessage.cs" />
     <Compile Include="Messaging\DictionaryItemMessageHandler.cs" />
     <Compile Include="Messaging\DictionaryMessageBus.cs" />
     <Compile Include="Pipelines\Initialize\InitializeDictionaryMessaging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SitecoreDictionarySettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -155,8 +161,6 @@
     <None Include="App_Config\Modules\Pintle.Dictionary\Pintle.Dictionary.Services.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,5 +8,6 @@
 		public string Language { get; set; }
 		public string DefaultValue { get; set; }
 		public Guid DictionaryDomainId { get; set; }
+		public string Database { get; set; }
 	}
 }

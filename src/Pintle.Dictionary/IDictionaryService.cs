@@ -2,6 +2,6 @@
 {
 	public interface IDictionaryService
 	{
-		string Translate(string key, string defaultValue = null, bool editable = false, string language = null, bool autoCreate = true);
+		string Translate(string key, string defaultValue = null, bool editable = false, string language = null);
 	}
 }
