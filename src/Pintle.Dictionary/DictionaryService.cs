@@ -1,11 +1,11 @@
-﻿using Sitecore.Data.Items;
-using Sitecore.Data.Managers;
-using Sitecore.Web.UI.WebControls;
-
-namespace Pintle.Dictionary
+﻿namespace Pintle.Dictionary
 {
 	using System;
+	using Sitecore;
 	using Sitecore.Abstractions;
+	using Sitecore.Data.Items;
+	using Sitecore.Data.Managers;
+	using Sitecore.Web.UI.WebControls;
 
 	public class DictionaryService : IDictionaryService
 	{
@@ -16,7 +16,7 @@ namespace Pintle.Dictionary
 
 		public DictionaryService(
 			DictionaryItemRepository repository,
-			SitecoreDictionarySettings seStting,
+			SitecoreDictionarySettings setting,
 			DictionaryCache cache, 
 			BaseLog logger)
 		{
@@ -34,7 +34,7 @@ namespace Pintle.Dictionary
 		{
 			try
 			{
-				language = language ?? Sitecore.Context.Language.Name;
+				language = language ?? Context.Language.Name;
 
 				if (this.IsInEditingMode)
 				{
@@ -43,7 +43,7 @@ namespace Pintle.Dictionary
 
 				var value = this.cache.Get(key, language);
 
-				if (value == null)
+				if (value == null || value.Equals(key, StringComparison.OrdinalIgnoreCase))
 				{
 					value = this.Process(key, defaultValue, editable, language);
 					this.cache.Set(key, language, value);
@@ -66,46 +66,34 @@ namespace Pintle.Dictionary
 					return defaultValue ?? key;
 				}
 
-				string localizedString;
+				// if in editing mode - get or create item and render editable
+				var localizedString = this.IsInEditingMode && editable
+					? this.GetOrCreateAndRender(key, defaultValue, true, language)
+					: this.TranslateText(key, language);
 
-
-				var item = this.GetDictionaryPhraseItem(key, language);
-				if (item == null)
+				// try clear cache and get again
+				if (localizedString.Equals(key, StringComparison.OrdinalIgnoreCase))
 				{
-					this.repository.Create(key, defaultValue, language);
+					Sitecore.Globalization.Translate.RemoveKeyFromCache(key);
+					localizedString = this.TranslateText(key, language);
 				}
 
-				if (this.IsInEditingMode && editable)
-				{
-					
-					if (item != null)
-					{
-						return new FieldRenderer { Item = item, FieldName = this.DictionaryPhraseFieldName }.Render();
-					}
-				}
-
-				Sitecore.Globalization.Translate.RemoveKeyFromCache(key);
-				localizedString = this.TranslateText(key, language);
-
-				if (localizedString.Equals(key, StringComparison.InvariantCultureIgnoreCase))
+				// try reset cache and get again
+				if (localizedString.Equals(key, StringComparison.OrdinalIgnoreCase))
 				{
 					Sitecore.Globalization.Translate.ResetCache(true);
 					localizedString = this.TranslateText(key, language);
 				}
 
-				if (localizedString.Equals(key, StringComparison.InvariantCultureIgnoreCase))
+				// create item if does not exist
+				if (localizedString.Equals(key, StringComparison.OrdinalIgnoreCase))
 				{
-					localizedString = this.GetOrCreateDictionaryText(key, defaultValue, editable, language);
+					localizedString = this.GetOrCreateAndRender(key, defaultValue, editable, language);
 				}
 
-				if (!editable || !this.IsInEditingMode)
-				{
-					localizedString = this.TranslateText(key, language);
-				}
-
-				if (!this.IsInEditingMode && !string.IsNullOrWhiteSpace(defaultValue) &&
-				    (string.IsNullOrWhiteSpace(localizedString) ||
-				     localizedString.Equals(key, StringComparison.InvariantCultureIgnoreCase)))
+				if (!this.IsInEditingMode && !string.IsNullOrWhiteSpace(defaultValue)
+					 && (string.IsNullOrWhiteSpace(localizedString) || 
+						localizedString.Equals(key, StringComparison.OrdinalIgnoreCase)))
 				{
 					localizedString = defaultValue;
 				}
@@ -120,9 +108,41 @@ namespace Pintle.Dictionary
 			}
 		}
 
-		private Item GetDictionaryPhraseItem(string key, string language)
+		private string GetOrCreateAndRender(string key, string defaultValue, bool editable, string language)
 		{
-			throw new NotImplementedException();
+			string localizedString;
+
+			var item = this.repository.Get(key, language);
+			if (item == null)
+			{
+				this.repository.Create(key, defaultValue, language);
+				localizedString = defaultValue;
+			}
+			else
+			{
+				localizedString = this.RenderPhraseItem(key, item, editable);
+			}
+
+			return localizedString;
+		}
+
+		private string RenderPhraseItem(string key, Item item, bool editable)
+		{
+			if (this.IsInEditingMode && editable)
+			{
+				if (item != null)
+				{
+					var renderer = new FieldRenderer
+					{
+						Item = item,
+						FieldName = this.setting.DictionaryPhraseFieldName
+					};
+
+					return renderer.Render();
+				}
+			}
+
+			return item?[this.setting.DictionaryPhraseFieldName] ?? key;
 		}
 
 		protected virtual string TranslateText(string key, string language)
@@ -141,8 +161,6 @@ namespace Pintle.Dictionary
 			return Sitecore.Globalization.Translate.Text(key);
 		}
 
-		protected virtual bool IsInEditingMode => 
-			Sitecore.Context.PageMode.IsExperienceEditor 
-			|| Sitecore.Context.PageMode.IsExperienceEditorEditing;
+		protected virtual bool IsInEditingMode => Context.PageMode.IsExperienceEditor || Context.PageMode.IsExperienceEditorEditing;
 	}
 }

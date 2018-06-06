@@ -2,7 +2,7 @@
 {
 	using System;
 
-	public class DictionaryItemMessage
+	public class CreateDictionaryItemMessage
 	{
 		public string DictionaryKey { get; set; }
 		public string Language { get; set; }

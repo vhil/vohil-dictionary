@@ -10,7 +10,7 @@
 		/// </summary>
 		public static IDictionaryService GetConfiguredInstance()
 		{
-			var dictionaryService = Factory.CreateObject("pintle/dictionary/dictionaryService", false)
+			var dictionaryService = Factory.CreateObject("pintle/dictionary/dictionaryService", true)
 				as IDictionaryService;
 
 			if (dictionaryService == null)

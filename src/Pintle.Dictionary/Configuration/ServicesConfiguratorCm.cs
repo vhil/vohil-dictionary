@@ -9,7 +9,7 @@
 	{
 		public void Configure(IServiceCollection serviceCollection)
 		{
-			serviceCollection.AddTransient<IMessageHandler<DictionaryItemMessage>, DictionaryItemMessageHandler>();
+			serviceCollection.AddTransient<IMessageHandler<CreateDictionaryItemMessage>, DictionaryItemMessageHandler>();
 		}
 	}
 }
