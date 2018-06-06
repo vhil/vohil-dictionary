@@ -76,10 +76,10 @@ public class MyController : Controller
 ```cs
 public ActionResult MyView()
 {
-	var facebook = this.dictionary.Translate("header/socialNetworks.facebook", "Facebook");
-	var twitter = this.dictionary.Translate("header/socialNetworks.twitter", "Twitter", editable: true);
-	var linkedIn = this.dictionary.Translate("header/socialNetworks.linkedIn");
-	var instagramm = this.dictionary.Translate("header/socialNetworks.instagramm", editable: true);
+	var facebook = this.dictionary.Translate("header/socialNetworks/facebook", "Facebook");
+	var twitter = this.dictionary.Translate("header/socialNetworks/twitter", "Twitter", editable: true);
+	var linkedIn = this.dictionary.Translate("header/socialNetworks/linkedIn");
+	var instagramm = this.dictionary.Translate("header/socialNetworks/instagramm", editable: true);
 	//...
 }
 ```
