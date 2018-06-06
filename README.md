@@ -28,20 +28,13 @@ Within helix modular architecture:
 ```
 /sitecore/templates/System/Dictionary/Dictionary Domain
 ```
-note: if no dedicated dictionary domain is required, the module will use default dictionary item in 
-```
-/sitecore/system/Dictionary
-```
 
-
-Set dictionary domain ID's to website configuration node (if required). For example default website node can be patched:
+2. Set dictionary domain ID's to website configuration node (if required). For example default website node can be patched:
 ```xml
 <site name="website">
 	<patch:attribute name="dictionaryDomain">{5FE5BF78-AC6B-4AF2-92A9-9F4AE14579C8}</patch:attribute>
 </site>
 ```
-
- 
 ## Using dictionary translation in Razor View:
  
 ```cs
@@ -52,7 +45,7 @@ Set dictionary domain ID's to website configuration node (if required). For exam
 @Html.Sitecore().Dictionary().Translate("header/socialNetworks/linkedIn")
 @Html.Sitecore().Dictionary().Translate("header/socialNetworks/instagramm", editable:true)
 ```
-On first page load, relevant dictionary items will be created in your configured Dictionary Domain for the website (if no domain configured, the '/sitecore/system/Dictionary' is used).
+On first page load, relevant dictionary items will be created in your configured Dictionary Domain for the website (if no domain configured, the `/sitecore/system/Dictionary` is used).
 ```
 *[DictionaryDomainItem]/Header/SocialNetworks/Facebook - with default value "Facebook" in language the page were opened
 *[DictionaryDomainItem]/Header/SocialNetworks/Twitter - with default value "Twitter" in language the page were opened. In editing mode this phrase will be editable.
@@ -93,7 +86,7 @@ public ActionResult MyView()
 
 ## Content Delivery (CD) and Content Management (CM) sitecore instances
 
-Dictionary item creation is handled through Sitecore message bus. This means if the dictionary service is being called on your CD instance and there are phrase items that need to be created in masetr database, the CD server will send a message to CM server and the item will be created and pblished byt the Content Management sitecore instance.
+Dictionary item creation is handled through Sitecore message bus (Introduced in Sitecore 9 release). This means if the dictionary service is being called on your CD instance and there are phrase items that need to be created in masetr database, the CD server will send a message to CM server and the item will be created and pblished byt the Content Management sitecore instance.
 
 ## Requirements
 
