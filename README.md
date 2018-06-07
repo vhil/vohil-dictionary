@@ -92,3 +92,56 @@ Dictionary item creation is handled through Sitecore message bus (introduced in 
 
 * Sitecore CMS 9.0.1 or later
 * .NET Framework 4.6.2 or later
+
+## Documentation
+
+The module is completely configuration driven and implemented with proper responsibility separation and abstraction level. Once installed, all dependencies and services can be found in Sitecore configuration files, and this is the entry point in case you need to patch it for your needs.
+The most important config file is [Pintle.Dictionary.Services.config](https://github.com/pintle/pintle-dictionary/blob/master/src/Pintle.Dictionary/App_Config/Modules/Pintle.Dictionary/Pintle.Dictionary.Services.config "Pintle.Dictionary.Services.config"):
+```xml
+<configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
+  <sitecore>
+    <pintle>
+      <dictionary>
+        <dictionaryService type="Pintle.Dictionary.DictionaryService, Pintle.Dictionary">
+          <param name="repository" ref="pintle/dictionary/itemRepository"/>
+          <param name="settings" ref="pintle/dictionary/settings"/>
+          <param name="cache" ref="pintle/dictionary/cache"/>
+          <param name="logger" type="Sitecore.Abstractions.BaseLog, Sitecore.Kernel" resolve="true"/>
+        </dictionaryService>
+        <cache type="Pintle.Dictionary.DictionaryCache, Pintle.Dictionary" singleInstance="true">
+          <param name="cacheName">Pintle.Dictionary.Cache</param>
+          <param name="cacheSize">10MB</param>
+        </cache>
+        <itemRepository type="Pintle.Dictionary.DictionaryItemRepository, Pintle.Dictionary">
+          <param name="settings" ref="pintle/dictionary/settings"/>
+          <param name="messageBus" type="Sitecore.Framework.Messaging.IMessageBus`1[[Pintle.Dictionary.Messaging.DictionaryMessageBus, Pintle.Dictionary]], Sitecore.Framework.Messaging.Abstractions" resolve="true"/>
+          <param name="logger" type="Sitecore.Abstractions.BaseLog, Sitecore.Kernel" resolve="true"/>
+        </itemRepository>
+        <settings type="Pintle.Dictionary.SitecoreDictionarySettings, Pintle.Dictionary" singleInstnace="true">
+          <dictionaryDomainTemplateId>{0A2847E6-9885-450B-B61E-F9E6528480EF}</dictionaryDomainTemplateId>
+          <dictionaryFolderTemplateId>{267D9AC7-5D85-4E9D-AF89-99AB296CC218}</dictionaryFolderTemplateId>
+          <dictionaryPhraseTemplateId>{6D1CD897-1936-4A3A-A511-289A94C2A7B1}</dictionaryPhraseTemplateId>
+          <DictionaryKeyFieldName>Key</DictionaryKeyFieldName>
+          <dictionaryPhraseFieldName>Phrase</dictionaryPhraseFieldName>
+          <itemCreationDatabase>master</itemCreationDatabase>
+        </settings>
+        <iconSettings type="Pintle.Dictionary.DictionaryIconSettings, Pintle.Dictionary" singleInstnace="true">
+          <DictionaryDomainIcon>Office/32x32/books.png</DictionaryDomainIcon>
+          <DictionaryFolderIcon>Office/32x32/book2.png</DictionaryFolderIcon>
+          <DictionaryPhraseIcon>Office/32x32/text_field.png</DictionaryPhraseIcon>
+        </iconSettings>
+      </dictionary>
+    </pintle>
+  </sitecore>
+</configuration>
+```
+
+## Contributing
+
+We love it if you would contribute!
+
+Help us! Keep the quality of feature requests and bug reports high
+
+We strive to make it possible for everyone and anybody to contribute to this project. Please help us by making issues easier to resolve by providing sufficient information. Understanding the reasons behind issues can take a lot of time if information is left out.
+
+Thank you, and happy contributing!
