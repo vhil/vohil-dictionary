@@ -71,17 +71,10 @@
 					? this.GetOrCreateAndRender(key, defaultValue, true, language)
 					: this.TranslateText(key, language);
 
-				// try clear cache and get again
+				// try clear translations cache and get again
 				if (localizedString.Equals(key, StringComparison.OrdinalIgnoreCase))
 				{
 					Sitecore.Globalization.Translate.RemoveKeyFromCache(key);
-					localizedString = this.TranslateText(key, language);
-				}
-
-				// try reset cache and get again
-				if (localizedString.Equals(key, StringComparison.OrdinalIgnoreCase))
-				{
-					Sitecore.Globalization.Translate.ResetCache(true);
 					localizedString = this.TranslateText(key, language);
 				}
 
