@@ -72,7 +72,7 @@ public class MyController : Controller
 }
 ```
 
-2. use same notation as for razor view:
+2. use same notation:
 ```cs
 public ActionResult MyView()
 {
@@ -86,9 +86,9 @@ public ActionResult MyView()
 
 ## Content Delivery (CD) and Content Management (CM) sitecore instances
 
-Dictionary item creation is handled through Sitecore message bus (Introduced in Sitecore 9 release). This means if the dictionary service is being called on your CD instance and there are phrase items that need to be created in masetr database, the CD server will send a message to CM server and the item will be created and pblished byt the Content Management sitecore instance.
+Dictionary item creation is handled through Sitecore message bus (introduced in Sitecore 9 update 1 release). This means if the dictionary service is being called on your CD instance and there are phrase items that need to be created in master database, the CD server will send a message to CM server and the item will be created and published by the Content Management sitecore instance.
 
 ## Requirements
 
-* Sitecore CMS 9.0.0 or later
+* Sitecore CMS 9.0.1 or later
 * .NET Framework 4.6.2 or later
