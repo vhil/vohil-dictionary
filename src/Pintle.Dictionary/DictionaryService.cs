@@ -10,13 +10,13 @@
 	public class DictionaryService : IDictionaryService
 	{
 		private readonly DictionaryItemRepository repository;
-		private readonly SitecoreDictionarySettings setting;
+		private readonly DictionarySettings setting;
 		private readonly DictionaryCache cache;
 		private readonly BaseLog logger;
 
 		public DictionaryService(
 			DictionaryItemRepository repository,
-			SitecoreDictionarySettings setting,
+			DictionarySettings setting,
 			DictionaryCache cache, 
 			BaseLog logger)
 		{

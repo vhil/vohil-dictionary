@@ -17,13 +17,13 @@
 
 	public class DictionaryItemRepository
 	{
-		private readonly SitecoreDictionarySettings settings;
+		private readonly DictionarySettings settings;
 		private readonly IMessageBus<DictionaryMessageBus> messageBus;
 		private readonly BaseLog logger;
 		private static readonly object SyncRoot = new object();
 
 		public DictionaryItemRepository(
-			SitecoreDictionarySettings settings, 
+			DictionarySettings settings, 
 			IMessageBus<DictionaryMessageBus> messageBus,
 			BaseLog logger)
 		{

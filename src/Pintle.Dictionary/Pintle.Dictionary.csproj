@@ -76,6 +76,9 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.1.0.0\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -108,6 +111,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.4.1.0\lib\net462\System.IO.dll</HintPath>
@@ -130,6 +134,24 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -140,6 +162,14 @@
   <ItemGroup>
     <Compile Include="Configuration\ServicesConfigurator.cs" />
     <Compile Include="Configuration\ServicesConfiguratorCm.cs" />
+    <Compile Include="DataAnnotationDefaultPhrases.cs" />
+    <Compile Include="DataAnnotations\ClientAdapters\CompareAttributeAdapter.cs" />
+    <Compile Include="DataAnnotations\CompareTranslatedAttribute.cs" />
+    <Compile Include="DataAnnotations\EmailAddressTranslatedAttribute.cs" />
+    <Compile Include="DataAnnotations\ITranslateableAttribute.cs" />
+    <Compile Include="DataAnnotations\RangeTranslatedAttribute.cs" />
+    <Compile Include="DataAnnotations\RequiredTranslatedAttribute.cs" />
+    <Compile Include="DataAnnotations\StringLengthTranslatedAttribute.cs" />
     <Compile Include="DictionaryCache.cs" />
     <Compile Include="DictionaryIconSettings.cs" />
     <Compile Include="DictionaryItemRepository.cs" />
@@ -154,9 +184,11 @@
     <Compile Include="Messaging\DictionaryMessageBus.cs" />
     <Compile Include="Mvc\MvcDictionaryServiceWrapper.cs" />
     <Compile Include="Pipelines\Initialize\InitializeDictionaryMessaging.cs" />
+    <Compile Include="Pipelines\Initialize\RegisterCustomDataAnnotations.cs" />
     <Compile Include="Pipelines\Initialize\SetCustomIcons.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SitecoreDictionarySettings.cs" />
+    <Compile Include="DictionarySettingsFactory.cs" />
+    <Compile Include="DictionarySettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -166,6 +198,9 @@
     <None Include="App_Config\Modules\Pintle.Dictionary\Pintle.Dictionary.Messaging.config" />
     <None Include="App_Config\Modules\Pintle.Dictionary\Pintle.Dictionary.Pipelines.config" />
     <None Include="App_Config\Modules\Pintle.Dictionary\Pintle.Dictionary.Events.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="App_Config\Modules\Pintle.Dictionary\Pintle.Dictionary.DefaultPhrases.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="App_Config\Modules\Pintle.Dictionary\Pintle.Dictionary.Services.config">

@@ -2,7 +2,7 @@
 {
 	using System;
 
-	public class SitecoreDictionarySettings
+	public class DictionarySettings
 	{
 		public virtual Guid DictionaryDomainTemplateId { get; protected set; }
 		public virtual Guid DictionaryFolderTemplateId { get; protected set; }

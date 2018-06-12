@@ -9,7 +9,11 @@
 		public void Configure(IServiceCollection serviceCollection)
 		{
 			serviceCollection.AddTransient(provider => DictionaryServiceFactory.GetConfiguredInstance());
-			serviceCollection.AddSingleton(provider => Factory.CreateObject("pintle/dictionary/settings", true) as SitecoreDictionarySettings);
+
+			serviceCollection.AddSingleton(provider => DictionarySettingsFactory.ConfiguredInstance);
+			serviceCollection.AddSingleton(provider => DictionarySettingsFactory.ConfiguredInstance.DictionarySettings);
+			serviceCollection.AddSingleton(provider => DictionarySettingsFactory.ConfiguredInstance.DictionaryIconSettings);
+
 			serviceCollection.AddTransient(provider => Factory.CreateObject("pintle/dictionary/itemRepository", true) as DictionaryItemRepository);
 			serviceCollection.AddSingleton(provider => Factory.CreateObject("pintle/dictionary/cache", true) as DictionaryCache);
 		}

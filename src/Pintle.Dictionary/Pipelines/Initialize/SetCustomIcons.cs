@@ -10,12 +10,12 @@
 
 	public class SetCustomIcons
 	{
-		private readonly SitecoreDictionarySettings settings;
+		private readonly DictionarySettings settings;
 		private readonly DictionaryIconSettings iconSettings;
 		private readonly BaseLog logger;
 
 		public SetCustomIcons(
-			SitecoreDictionarySettings settings,
+			DictionarySettings settings,
 			DictionaryIconSettings iconSettings,
 			BaseLog logger)
 		{
