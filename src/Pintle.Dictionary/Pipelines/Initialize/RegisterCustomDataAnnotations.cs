@@ -24,6 +24,10 @@
 			DataAnnotationsModelValidatorProvider.RegisterAdapter(
 				typeof(RangeTranslatedAttribute),
 				typeof(RangeAttributeAdapter));
+
+			DataAnnotationsModelValidatorProvider.RegisterAdapter(
+				typeof(RegularExpressionTranslatedAttribute),
+				typeof(RegularExpressionAttributeAdapter));
 		}
 	}
 }

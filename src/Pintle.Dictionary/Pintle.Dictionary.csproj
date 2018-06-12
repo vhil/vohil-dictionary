@@ -165,11 +165,15 @@
     <Compile Include="DataAnnotationDefaultPhrases.cs" />
     <Compile Include="DataAnnotations\ClientAdapters\CompareAttributeAdapter.cs" />
     <Compile Include="DataAnnotations\CompareTranslatedAttribute.cs" />
+    <Compile Include="DataAnnotations\CreditCardTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\EmailAddressTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\ITranslateableAttribute.cs" />
+    <Compile Include="DataAnnotations\PhoneTanslatedAttribute.cs" />
     <Compile Include="DataAnnotations\RangeTranslatedAttribute.cs" />
+    <Compile Include="DataAnnotations\RegularExpressionTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\RequiredTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\StringLengthTranslatedAttribute.cs" />
+    <Compile Include="DataAnnotations\UrlTranslatedAttribute.cs" />
     <Compile Include="DictionaryCache.cs" />
     <Compile Include="DictionaryIconSettings.cs" />
     <Compile Include="DictionaryItemRepository.cs" />
