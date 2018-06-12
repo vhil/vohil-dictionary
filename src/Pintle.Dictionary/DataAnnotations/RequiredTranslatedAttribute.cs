@@ -13,6 +13,7 @@
 		{
 			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
 			this.DefaultTranslation = defaultPhrases.Required;
+			this.DictionaryKey = "Validation messages/required";
 		}
 
 		public string DictionaryKey { get; set; }

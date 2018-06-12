@@ -17,6 +17,7 @@
 		{
 			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
 			this.DefaultTranslation = defaultPhrases.EmailAddress;
+			this.DictionaryKey = "Validation messages/email invalid";
 		}
 
 		private static string EmailValidationRegex => Settings.GetSetting(

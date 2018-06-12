@@ -13,6 +13,7 @@
 		{
 			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
 			this.DefaultTranslation = defaultPhrases.StringLength;
+			this.DictionaryKey = "Validation messages/string length";
 		}
 
 		public string DictionaryKey { get; set; }

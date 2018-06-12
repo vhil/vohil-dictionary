@@ -168,7 +168,7 @@
     <Compile Include="DataAnnotations\CreditCardTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\EmailAddressTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\ITranslateableAttribute.cs" />
-    <Compile Include="DataAnnotations\PhoneTanslatedAttribute.cs" />
+    <Compile Include="DataAnnotations\PhoneTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\RangeTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\RegularExpressionTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\RequiredTranslatedAttribute.cs" />

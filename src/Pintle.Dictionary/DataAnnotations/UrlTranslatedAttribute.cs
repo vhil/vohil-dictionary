@@ -18,6 +18,7 @@
 		{
 			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
 			this.DefaultTranslation = defaultPhrases.Url;
+			this.DictionaryKey = "Validation messages/url";
 		}
 
 		private static string UrlValidationRegex => Settings.GetSetting(

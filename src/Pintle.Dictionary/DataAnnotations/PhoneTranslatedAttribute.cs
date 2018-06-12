@@ -9,15 +9,16 @@
 	using Sitecore.Configuration;
 
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-	public class PhoneTanslatedAttribute : DataTypeAttribute, ITranslateableAttribute, IClientValidatable
+	public class PhoneTranslatedAttribute : DataTypeAttribute, ITranslateableAttribute, IClientValidatable
 	{
 		private IDictionaryService Dictionary => DictionaryServiceFactory.GetConfiguredInstance();
 
-		public PhoneTanslatedAttribute()
+		public PhoneTranslatedAttribute()
 			:base(DataType.PhoneNumber)
 		{
 			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
 			this.DefaultTranslation = defaultPhrases.Phone;
+			this.DictionaryKey = "Validation messages/phone invalid";
 		}
 
 		private static string PhoneValidationRegex => Settings.GetSetting(

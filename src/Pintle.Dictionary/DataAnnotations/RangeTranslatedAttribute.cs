@@ -32,6 +32,7 @@
 		{
 			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
 			this.DefaultTranslation = defaultPhrases.Range;
+			this.DictionaryKey = "Validation messages/range";
 		}
 
 		public override string FormatErrorMessage(string name)

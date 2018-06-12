@@ -13,6 +13,7 @@
 		{
 			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
 			this.DefaultTranslation = defaultPhrases.Compare;
+			this.DictionaryKey = "Validation messages/compare";
 		}
 
 		public string DictionaryKey { get; set; }

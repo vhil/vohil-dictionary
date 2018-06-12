@@ -17,6 +17,7 @@
 		{
 			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
 			this.DefaultTranslation = defaultPhrases.CreditCard;
+			this.DictionaryKey = "Validation messages/credit card invalid";
 		}
 
 		public string DictionaryKey { get; set; }

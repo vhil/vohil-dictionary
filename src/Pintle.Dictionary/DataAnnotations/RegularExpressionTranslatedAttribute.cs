@@ -13,6 +13,7 @@
 		{
 			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
 			this.DefaultTranslation = defaultPhrases.RegularExpression;
+			this.DictionaryKey = "Validation messages/regular expression";
 		}
 
 		public string DictionaryKey { get; set; }
