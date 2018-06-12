@@ -67,7 +67,7 @@
 		{
 			return new[] { new ModelClientValidationRule
 			{
-				ErrorMessage = this.ErrorMessage,
+				ErrorMessage = this.FormatErrorMessage(string.Empty),
 				ValidationType = "creditcard"
 			}};
 		}
