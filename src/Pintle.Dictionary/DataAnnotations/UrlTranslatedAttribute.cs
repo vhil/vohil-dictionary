@@ -16,9 +16,6 @@
 		public UrlTranslatedAttribute() 
 			: base(DataType.Url)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
-			this.DefaultTranslation = defaultPhrases.Url;
-			this.DictionaryKey = "Validation messages/url";
 		}
 
 		private static string UrlValidationRegex => Settings.GetSetting(
@@ -33,6 +30,18 @@
 
 		public override string FormatErrorMessage(string name)
 		{
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+
+			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
+			{
+				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Url)}";
+			}
+
+			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
+			{
+				this.DefaultTranslation = defaultPhrases.Url;
+			}
+
 			return !string.IsNullOrEmpty(this.DictionaryKey)
 				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;
@@ -55,11 +64,20 @@
 
 		public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
 		{
-			return new[] { new ModelClientValidationRule
+			var errorMessage = this.FormatErrorMessage(string.Empty);
+
+			return new[]
 			{
-				ErrorMessage = this.FormatErrorMessage(string.Empty),
-				ValidationType = "url"
-			}};
+				new ModelClientValidationRule
+				{
+					ErrorMessage = errorMessage,
+					ValidationType = "url"
+				},
+				new ModelClientValidationRegexRule(errorMessage, UrlValidationRegex)
+				{
+					ValidationType = "urlregex"
+				}
+			};
 		}
 	}
 }

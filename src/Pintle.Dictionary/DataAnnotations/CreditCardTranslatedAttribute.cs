@@ -15,9 +15,6 @@
 		public CreditCardTranslatedAttribute() 
 			: base(DataType.CreditCard)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
-			this.DefaultTranslation = defaultPhrases.CreditCard;
-			this.DictionaryKey = "Validation messages/credit card invalid";
 		}
 
 		public string DictionaryKey { get; set; }
@@ -26,6 +23,18 @@
 
 		public override string FormatErrorMessage(string name)
 		{
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+
+			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
+			{
+				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.CreditCard)}";
+			}
+
+			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
+			{
+				this.DefaultTranslation = defaultPhrases.CreditCard;
+			}
+
 			return !string.IsNullOrEmpty(this.DictionaryKey)
 				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;

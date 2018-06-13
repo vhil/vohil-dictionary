@@ -14,11 +14,8 @@
 		private IDictionaryService Dictionary => DictionaryServiceFactory.GetConfiguredInstance();
 
 		public PhoneTranslatedAttribute()
-			:base(DataType.PhoneNumber)
+			: base(DataType.PhoneNumber)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
-			this.DefaultTranslation = defaultPhrases.Phone;
-			this.DictionaryKey = "Validation messages/phone invalid";
 		}
 
 		private static string PhoneValidationRegex => Settings.GetSetting(
@@ -33,6 +30,18 @@
 
 		public override string FormatErrorMessage(string name)
 		{
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+
+			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
+			{
+				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Phone)}";
+			}
+
+			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
+			{
+				this.DefaultTranslation = defaultPhrases.Phone;
+			}
+
 			return !string.IsNullOrEmpty(this.DictionaryKey)
 				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;
@@ -55,11 +64,20 @@
 
 		public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
 		{
-			return new[] { new ModelClientValidationRule
+			var errorMessage = this.FormatErrorMessage(string.Empty);
+
+			return new[]
 			{
-				ErrorMessage = this.FormatErrorMessage(string.Empty),
-				ValidationType = "phone"
-			}};
+				new ModelClientValidationRule
+				{
+					ErrorMessage = errorMessage,
+					ValidationType = "phone"
+				},
+				new ModelClientValidationRegexRule(errorMessage, PhoneValidationRegex)
+				{
+					ValidationType = "phoneregex"
+				}
+			};
 		}
 	}
 }

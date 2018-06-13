@@ -163,8 +163,8 @@
     <Compile Include="Configuration\ServicesConfigurator.cs" />
     <Compile Include="Configuration\ServicesConfiguratorCm.cs" />
     <Compile Include="DataAnnotationDefaultPhrases.cs" />
-    <Compile Include="DataAnnotations\ClientAdapters\CompareAttributeAdapter.cs" />
     <Compile Include="DataAnnotations\CompareTranslatedAttribute.cs" />
+    <Compile Include="DataAnnotations\Constants.cs" />
     <Compile Include="DataAnnotations\CreditCardTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\EmailAddressTranslatedAttribute.cs" />
     <Compile Include="DataAnnotations\ITranslateableAttribute.cs" />

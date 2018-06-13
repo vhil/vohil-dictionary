@@ -88,9 +88,11 @@
 			{
 				var publishingItem = item;
 
+				toPublishList.Add(publishingItem);
+
 				while (publishingItem.ID != dictionaryRoot.ID)
 				{
-					toPublishList.Add(publishingItem);
+					toPublishList.Add(publishingItem.Parent);
 					publishingItem = publishingItem.Parent;
 				}
 
@@ -106,8 +108,8 @@
 						false);
 
 					this.logger.Debug(
-						$"[Pintle.Dictionary]: Dictionary item is being published... Language: '{item.Language.Name}', " +
-						$"dictionary item path: '{item.Paths.FullPath}'",
+						$"[Pintle.Dictionary]: Dictionary item is being published... Language: '{toPublish.Language.Name}', " +
+						$"dictionary item path: '{toPublish.Paths.FullPath}'",
 						this);
 				}
 			}
@@ -149,21 +151,50 @@
 
 		public void CreateItem(string key, string defaultValue, Guid domainId, Language language, Database database)
 		{
-			if (this.Get(key, language.Name, domainId) != null) return;
-
-			lock (SyncRoot)
+			if (this.Get(key, language.Name, domainId) == null)
 			{
-				if (this.Get(key, language.Name, domainId) != null) return;
+				lock (SyncRoot)
+				{
+					if (this.Get(key, language.Name, domainId) == null)
+					{
+						var phrasePath = this.GetPhraseItemPath(key, language, domainId);
 
-				var phrasePath = this.GetPhraseItemPath(key, language, domainId);
+						var folderTemplate = database.GetTemplate(new ID(this.settings.DictionaryFolderTemplateId));
+						var phraseTemplate = database.GetTemplate(new ID(this.settings.DictionaryPhraseTemplateId));
 
-				var folderTemplate = database.GetTemplate(new ID(this.settings.DictionaryFolderTemplateId));
-				var phraseTemplate = database.GetTemplate(new ID(this.settings.DictionaryPhraseTemplateId));
+						using (new SecurityDisabler())
+						{
+							var item = database.CreateItemPath(phrasePath, folderTemplate, phraseTemplate);
 
+							this.logger.Info(
+								$"[Pintle.Dictionary]: Dictionary phrase item with key '{key}' has been created. " +
+								$"Language: '{item.Language.Name}', item path: '{item.Paths.FullPath}'",
+								this);
+						}
+					}
+				}
+			}
+
+			var phraseItem = this.Get(key, language.Name, domainId);
+
+			if (!phraseItem.Versions.GetVersions().Any())
+			{
+				phraseItem.Versions.AddVersion();
+				phraseItem = this.Get(key, language.Name, domainId);
+
+				this.logger.Info(
+						$"[Pintle.Dictionary]: Added '{phraseItem.Language.Name}' language version " +
+						$"to phrase item '{phraseItem.Paths.FullPath}'",
+					this);
+			}
+
+			var keyIsEmpty = string.IsNullOrWhiteSpace(phraseItem[this.settings.DictionaryKeyFieldName]);
+			var phraseIsEmpty = string.IsNullOrWhiteSpace(phraseItem[this.settings.DictionaryPhraseFieldName]);
+
+			if (keyIsEmpty || phraseIsEmpty)
+			{
 				using (new SecurityDisabler())
 				{
-					var phraseItem = database.CreateItemPath(phrasePath, folderTemplate, phraseTemplate);
-
 					using (new EditContext(phraseItem))
 					{
 						phraseItem[this.settings.DictionaryKeyFieldName] = key;
@@ -171,10 +202,8 @@
 					}
 
 					this.logger.Debug(
-						$"[Pintle.Dictionary]: Dictionary phrase item with key '{key}' " +
-						$"has been created with default value '{defaultValue}'. " +
-						$"Language: '{phraseItem.Language.Name}', " +
-						$"item path: '{phraseItem.Paths.FullPath}'",
+						$"[Pintle.Dictionary]: Updated '{phraseItem.Language.Name}' language version of phrase item with key '{key}' " +
+						$"and default value '{defaultValue}'. item path: '{phraseItem.Paths.FullPath}'.",
 						this);
 
 					this.PublishItem(phraseItem, domainId);

@@ -35,7 +35,7 @@
 			if (settings == null)
 			{
 				this.Logger.Warn(
-					$"Unable to find default data annotation settings for target language '{language}' " +
+					$"[Pintle.Dictionary]: Unable to find default data annotation settings for target language '{language}' " +
 					$"in configuration. Default phrase settings from node '{defaultConfigNode}' will be used instead. " +
 					$"Please make sure configuration node by path '{languageConfigNode}' exists and properly configured.", this);
 
@@ -44,7 +44,7 @@
 
 			if (settings == null)
 			{
-				throw new ConfigurationException($"Default phrases are not configured. Please make sure configuration node by path '{defaultConfigNode}' exists and properly configured.");
+				throw new ConfigurationException($"[Pintle.Dictionary]: Default phrases are not configured. Please make sure configuration node by path '{defaultConfigNode}' exists and properly configured.");
 			}
 
 			return settings;

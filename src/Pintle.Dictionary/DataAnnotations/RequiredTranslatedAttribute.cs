@@ -9,19 +9,24 @@
 	{
 		private IDictionaryService Dictionary => DictionaryServiceFactory.GetConfiguredInstance();
 
-		public RequiredTranslatedAttribute()
-		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
-			this.DefaultTranslation = defaultPhrases.Required;
-			this.DictionaryKey = "Validation messages/required";
-		}
-
 		public string DictionaryKey { get; set; }
 		public string DefaultTranslation { get; set; }
 		public bool Editable { get; set; }
 
 		public override string FormatErrorMessage(string name)
 		{
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+
+			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
+			{
+				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Required)}";
+			}
+
+			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
+			{
+				this.DefaultTranslation = defaultPhrases.Required;
+			}
+
 			return !string.IsNullOrEmpty(this.DictionaryKey)
 				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;

@@ -15,9 +15,6 @@
 
 		public EmailAddressTranslatedAttribute() : base(DataType.EmailAddress)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
-			this.DefaultTranslation = defaultPhrases.EmailAddress;
-			this.DictionaryKey = "Validation messages/email invalid";
 		}
 
 		private static string EmailValidationRegex => Settings.GetSetting(
@@ -32,6 +29,18 @@
 
 		public override string FormatErrorMessage(string name)
 		{
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+
+			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
+			{
+				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.EmailAddress)}";
+			}
+
+			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
+			{
+				this.DefaultTranslation = defaultPhrases.EmailAddress;
+			}
+
 			return !string.IsNullOrEmpty(this.DictionaryKey)
 				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;
@@ -60,11 +69,20 @@
 
 		public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
 		{
-			return new[] { new ModelClientValidationRule
+			var errorMessage = this.FormatErrorMessage(string.Empty);
+
+			return new[] 
 			{
-				ErrorMessage = this.FormatErrorMessage(string.Empty),
-				ValidationType = "email"
-			}};
+				new ModelClientValidationRule
+				{
+					ErrorMessage = errorMessage,
+					ValidationType = "email"
+				},
+				new ModelClientValidationRegexRule(errorMessage, EmailValidationRegex)
+				{
+					ValidationType = "emailregex"
+				}
+			};
 		}
 	}
 }

@@ -11,32 +11,34 @@
 
 		public RangeTranslatedAttribute(int minimum, int maximum) : base(minimum, maximum)
 		{
-			this.InitializeDefaultValue();
 		}
 
 		public RangeTranslatedAttribute(double minimum, double maximum) : base(minimum, maximum)
 		{
-			this.InitializeDefaultValue();
 		}
 
 		public RangeTranslatedAttribute(Type type, string minimum, string maximum) : base(type, minimum, maximum)
 		{
-			this.InitializeDefaultValue();
 		}
 
 		public string DictionaryKey { get; set; }
 		public string DefaultTranslation { get; set; }
 		public bool Editable { get; set; }
 
-		private void InitializeDefaultValue()
-		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
-			this.DefaultTranslation = defaultPhrases.Range;
-			this.DictionaryKey = "Validation messages/range";
-		}
-
 		public override string FormatErrorMessage(string name)
 		{
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+
+			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
+			{
+				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Range)}";
+			}
+
+			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
+			{
+				this.DefaultTranslation = defaultPhrases.Range;
+			}
+
 			var phrase = !string.IsNullOrEmpty(this.DictionaryKey)
 				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;

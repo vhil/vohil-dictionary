@@ -2,17 +2,12 @@
 {
 	using System.Web.Mvc;
 	using DataAnnotations;
-	using DataAnnotations.ClientAdapters;
 	using Sitecore.Pipelines;
 
 	public class RegisterCustomDataAnnotations
 	{
 		public void Process(PipelineArgs args)
 		{
-			DataAnnotationsModelValidatorProvider.RegisterAdapter(
-				typeof(CompareTranslatedAttribute),
-				typeof(CompareAttributeAdapter));
-
 			DataAnnotationsModelValidatorProvider.RegisterAdapter(
 				typeof(RequiredTranslatedAttribute),
 				typeof(RequiredAttributeAdapter));

@@ -106,7 +106,7 @@
 			string localizedString;
 
 			var item = this.repository.Get(key, language);
-			if (item == null)
+			if (string.IsNullOrWhiteSpace(item?[this.setting.DictionaryPhraseFieldName]))
 			{
 				this.repository.Create(key, defaultValue, language);
 				localizedString = defaultValue;

@@ -15,7 +15,7 @@
 
 			if (dictionaryService == null)
 			{
-				throw new ConfigurationException($"Configuration error. Service on node 'pintle/dictionary/dictionaryService' is not configured properly.");
+				throw new ConfigurationException($"[Pintle.Dictionary]: Configuration error. Service on node 'pintle/dictionary/dictionaryService' is not configured properly.");
 			}
 
 			return dictionaryService;
