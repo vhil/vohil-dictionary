@@ -11,10 +11,11 @@
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class EmailAddressTranslatedAttribute : DataTypeAttribute, ITranslateableAttribute, IClientValidatable
 	{
-		private IDictionaryService Dictionary => DictionaryServiceFactory.GetConfiguredInstance();
-
 		public EmailAddressTranslatedAttribute() : base(DataType.EmailAddress)
 		{
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+			this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.EmailAddress)}";
+			this.DefaultTranslation = defaultPhrases.EmailAddress;
 		}
 
 		private static string EmailValidationRegex => Settings.GetSetting(
@@ -29,20 +30,8 @@
 
 		public override string FormatErrorMessage(string name)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
-
-			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
-			{
-				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.EmailAddress)}";
-			}
-
-			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
-			{
-				this.DefaultTranslation = defaultPhrases.EmailAddress;
-			}
-
 			return !string.IsNullOrEmpty(this.DictionaryKey)
-				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
+				? DictionaryServiceFactory.GetConfiguredInstance().Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;
 		}
 
@@ -69,7 +58,7 @@
 
 		public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
 		{
-			var errorMessage = this.FormatErrorMessage(string.Empty);
+			var errorMessage = this.FormatErrorMessage(metadata.DisplayName);
 
 			return new[] 
 			{

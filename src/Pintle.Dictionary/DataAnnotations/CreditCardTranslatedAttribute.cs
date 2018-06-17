@@ -10,11 +10,12 @@
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class CreditCardTranslatedAttribute : DataTypeAttribute, ITranslateableAttribute, IClientValidatable
 	{
-		private IDictionaryService Dictionary => DictionaryServiceFactory.GetConfiguredInstance();
-
 		public CreditCardTranslatedAttribute() 
 			: base(DataType.CreditCard)
 		{
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+			this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.CreditCard)}";
+			this.DefaultTranslation = defaultPhrases.CreditCard;
 		}
 
 		public string DictionaryKey { get; set; }
@@ -23,20 +24,8 @@
 
 		public override string FormatErrorMessage(string name)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
-
-			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
-			{
-				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.CreditCard)}";
-			}
-
-			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
-			{
-				this.DefaultTranslation = defaultPhrases.CreditCard;
-			}
-
 			return !string.IsNullOrEmpty(this.DictionaryKey)
-				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
+				? DictionaryServiceFactory.GetConfiguredInstance().Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;
 		}
 
@@ -76,7 +65,7 @@
 		{
 			return new[] { new ModelClientValidationRule
 			{
-				ErrorMessage = this.FormatErrorMessage(string.Empty),
+				ErrorMessage = this.FormatErrorMessage(metadata.DisplayName),
 				ValidationType = "creditcard"
 			}};
 		}

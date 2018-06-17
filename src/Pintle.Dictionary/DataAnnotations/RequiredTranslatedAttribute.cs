@@ -7,28 +7,21 @@
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class RequiredTranslatedAttribute : RequiredAttribute, ITranslateableAttribute
 	{
-		private IDictionaryService Dictionary => DictionaryServiceFactory.GetConfiguredInstance();
-
 		public string DictionaryKey { get; set; }
 		public string DefaultTranslation { get; set; }
 		public bool Editable { get; set; }
 
-		public override string FormatErrorMessage(string name)
+		public RequiredTranslatedAttribute()
 		{
 			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+			this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Required)}";
+			this.DefaultTranslation = defaultPhrases.Required;
+		}
 
-			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
-			{
-				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Required)}";
-			}
-
-			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
-			{
-				this.DefaultTranslation = defaultPhrases.Required;
-			}
-
+		public override string FormatErrorMessage(string name)
+		{
 			return !string.IsNullOrEmpty(this.DictionaryKey)
-				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
+				? DictionaryServiceFactory.GetConfiguredInstance().Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;
 		}
 	}

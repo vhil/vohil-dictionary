@@ -11,11 +11,12 @@
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class UrlTranslatedAttribute : DataTypeAttribute, ITranslateableAttribute, IClientValidatable
 	{
-		private IDictionaryService Dictionary => DictionaryServiceFactory.GetConfiguredInstance();
-
 		public UrlTranslatedAttribute() 
 			: base(DataType.Url)
 		{
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+			this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Url)}";
+			this.DefaultTranslation = defaultPhrases.Url;
 		}
 
 		private static string UrlValidationRegex => Settings.GetSetting(
@@ -30,20 +31,8 @@
 
 		public override string FormatErrorMessage(string name)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
-
-			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
-			{
-				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Url)}";
-			}
-
-			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
-			{
-				this.DefaultTranslation = defaultPhrases.Url;
-			}
-
 			return !string.IsNullOrEmpty(this.DictionaryKey)
-				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
+				? DictionaryServiceFactory.GetConfiguredInstance().Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;
 		}
 
@@ -64,7 +53,7 @@
 
 		public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
 		{
-			var errorMessage = this.FormatErrorMessage(string.Empty);
+			var errorMessage = this.FormatErrorMessage(metadata.DisplayName);
 
 			return new[]
 			{

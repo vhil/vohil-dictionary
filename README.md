@@ -84,6 +84,130 @@ public ActionResult MyView()
 }
 ```
 
+## Translateable data annotations
+
+This module implements list of data annotations attributes that can be used while implementing custom forms. Given attributes fully compatible with regular ASP.NET unobstrictive validation and still can be used with jQuery plugin for it. Please refer to example below
+
+### Form class:
+```cs
+public class SignupForm
+{
+	[DisplayNameTranslated(DictionaryKey = "Signup/Email", DefaultTranslation = "E-mail address")]
+	[RequiredTranslated(DictionaryKey = "Signup/Validation/EmailRequired")]
+	[EmailAddressTranslated(DictionaryKey = "Signup/Validation/EmailInvalid")]
+	public string Email { get; set; }
+
+	[DisplayNameTranslated(DictionaryKey = "Signup/Phone", DefaultTranslation = "Phone number")]
+	[RequiredTranslated(DictionaryKey = "Signup/Validation/PhoneRequired")]
+	[PhoneTranslated(DictionaryKey = "Signup/Validation/PhoneInvalid")]
+	public string Phone { get; set; }
+
+	[DisplayNameTranslated(DictionaryKey = "Signup/CreditCard", DefaultTranslation = "Credit card")]
+	[RequiredTranslated(DictionaryKey = "Signup/Validation/CardRequired")]
+	[CreditCardTranslated(DictionaryKey = "Signup/Validation/CardInvalid")]
+	public string CreditCard { get; set; }
+
+	[DisplayNameTranslated(DictionaryKey = "Signup/Password", DefaultTranslation = "Your password")]
+	[RequiredTranslated(DictionaryKey = "Signup/Validation/PasswordRequired")]
+	[StringLengthTranslated(12, MinimumLength = 6, DictionaryKey = "Signup/Validation/PasswordsLength")]
+	public string Password { get; set; }
+
+	[DisplayNameTranslated(DictionaryKey = "Signup/ConfirmPassword", DefaultTranslation = "Confirm password")]
+	[RequiredTranslated]
+	[CompareTranslated(nameof(Password))]
+	public string ConfirmPassword { get; set; }
+
+	[DisplayNameTranslated(DictionaryKey = "Signup/Url", DefaultTranslation = "Website url")]
+	[RequiredTranslated(DictionaryKey = "Signup/Validation/UrlRequired")]
+	[UrlTranslated(DictionaryKey = "Signup/Validation/UrlInvalid")]
+	public string Url { get; set; }
+
+	[DisplayNameTranslated(DictionaryKey = "Signup/AcceptTerms", DefaultTranslation = "I accept terms and conditions")]
+	[RangeTranslated(typeof(bool), "true", "true", DictionaryKey = "Signup/Validation/AcceptTermsRequired", DefaultTranslation = "Please accept our terms and conditions.")]
+	public bool AcceptTerms { get; set; }
+
+	[DisplayNameTranslated(DictionaryKey = "Signup/NumberRegex", DefaultTranslation = "Amount of something")]
+	[RequiredTranslated(DictionaryKey = "Signup/Validation/NumberRequired")]
+	[RegularExpressionTranslated("^[0-9]*$", DictionaryKey = "Signup/Validation/NumberRegex")]
+	public string NumberRegex { get; set; }
+}
+```
+
+### Form view
+
+```html
+@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@using Pintle.Dictionary.Extensions
+@using Sitecore.Mvc
+@model SignupForm
+@{
+	HtmlHelper.ClientValidationEnabled = true;
+	HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
+}
+<form method="post" novalidate>
+	<div>
+		<label for="@Html.NameFor(x => x.Email)">
+			@Html.DisplayNameFor(x => x.Email)
+		</label>
+		@Html.EditorFor(x => x.Email)
+		@Html.ValidationMessageFor(x => x.Email, null)
+	</div>
+	<div>
+		<label for="@Html.NameFor(x => x.Phone)">
+			@Html.DisplayNameFor(x => x.Phone)
+		</label>
+		@Html.EditorFor(x => x.Phone)
+		@Html.ValidationMessageFor(x => x.Phone, null)
+	</div>
+	<div>
+		<label for="@Html.NameFor(x => x.CreditCard)">
+			@Html.DisplayNameFor(x => x.CreditCard)
+		</label>
+		@Html.EditorFor(x => x.CreditCard)
+		@Html.ValidationMessageFor(x => x.CreditCard, null)
+	</div>
+	<div>
+		<label for="@Html.NameFor(x => x.Password)">
+			@Html.DisplayNameFor(x => x.Password)
+		</label>
+		@Html.PasswordFor(x => x.Password)
+		@Html.ValidationMessageFor(x => x.Password, null)
+	</div>
+	<div>
+		<label for="@Html.NameFor(x => x.ConfirmPassword)">
+			@Html.DisplayNameFor(x => x.ConfirmPassword)
+		</label>
+		@Html.PasswordFor(x => x.ConfirmPassword)
+		@Html.ValidationMessageFor(x => x.ConfirmPassword, null)
+	</div>
+	<div>
+		<label for="@Html.NameFor(x => x.Url)">
+			@Html.DisplayNameFor(x => x.Url)
+		</label>
+		@Html.EditorFor(x => x.Url)
+		@Html.ValidationMessageFor(x => x.Url, null)
+	</div>
+	<div>
+		<label for="@Html.NameFor(x => x.AcceptTerms)">
+			@Html.DisplayNameFor(x => x.AcceptTerms)
+		</label>
+		@Html.CheckBoxFor(x => x.AcceptTerms)
+		@Html.ValidationMessageFor(x => x.AcceptTerms, null)
+	</div>
+	<div>
+		<label for="@Html.NameFor(x => x.NumberRegex)">
+			@Html.DisplayNameFor(x => x.NumberRegex)
+		</label>
+		@Html.EditorFor(x => x.NumberRegex)
+		@Html.ValidationMessageFor(x => x.NumberRegex, null)
+	</div>
+	<button type="submit">
+		<span>@Html.Sitecore().Dictionary().Translate("Signup/Continue", "Continue", true) </span>
+	</button>
+</form>
+```
+
 ## Content Delivery (CD) and Content Management (CM) sitecore instances
 
 Dictionary item creation is handled through Sitecore message bus (introduced in Sitecore 9 update 1 release). This means if the dictionary service is being called on your CD instance and there are phrase items that need to be created in master database, the CD server will send a message to CM server and the item will be created and published by the Content Management sitecore instance.

@@ -10,10 +10,11 @@ namespace Pintle.Dictionary.DataAnnotations
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class CompareTranslatedAttribute : CompareAttribute, ITranslateableAttribute, IClientValidatable
 	{
-		private IDictionaryService Dictionary => DictionaryServiceFactory.GetConfiguredInstance();
-
 		public CompareTranslatedAttribute(string otherProperty) : base(otherProperty)
 		{
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+			this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Compare)}";
+			this.DefaultTranslation = defaultPhrases.Compare;
 		}
 
 		public string DictionaryKey { get; set; }
@@ -22,20 +23,8 @@ namespace Pintle.Dictionary.DataAnnotations
 
 		public override string FormatErrorMessage(string name)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
-
-			if (string.IsNullOrWhiteSpace(this.DictionaryKey))
-			{
-				this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Compare)}";
-			}
-
-			if (string.IsNullOrWhiteSpace(this.DefaultTranslation))
-			{
-				this.DefaultTranslation = defaultPhrases.Compare;
-			}
-
 			var phrase = !string.IsNullOrEmpty(this.DictionaryKey)
-				? this.Dictionary.Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
+				? DictionaryServiceFactory.GetConfiguredInstance().Translate(this.DictionaryKey, this.DefaultTranslation, this.Editable)
 				: this.DefaultTranslation;
 
 			phrase = phrase.Replace("{0}", name);
@@ -47,8 +36,8 @@ namespace Pintle.Dictionary.DataAnnotations
 		public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
 		{
 			yield return new ModelClientValidationEqualToRule(
-				this.FormatErrorMessage(metadata.PropertyName), 
-				this.FormatPropertyForClientValidation(this.OtherProperty));
+				this.FormatErrorMessage(metadata.DisplayName), 
+				this.FormatPropertyForClientValidation(this.OtherPropertyDisplayName));
 		}
 
 		protected virtual string FormatPropertyForClientValidation(string property)
