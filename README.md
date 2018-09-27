@@ -5,7 +5,7 @@ Pintle.Dictionary is a Sitecore CMS module which provides an abstracted dictiona
 Functionality and features
  * designed for Sitecore 9.x CMS and later
  * uses default sitecore Translate mechanism
- * automatic dictionary phrase items creation (through Sitecore service bus)
+ * automatic dictionary phrase items creation (through [Sitecore service bus](https://www.pintle.dk/insights/using-sitecore-service-bus/))
  * mvc helper extensions for fast access
  * code first approach for dictionary phrase items
  * experience editor support for editable dictionary phrases
@@ -269,3 +269,6 @@ Help us! Keep the quality of feature requests and bug reports high
 We strive to make it possible for everyone and anybody to contribute to this project. Please help us by making issues easier to resolve by providing sufficient information. Understanding the reasons behind issues can take a lot of time if information is left out.
 
 Thank you, and happy contributing!
+
+## License
+pintle-dictionary is made available under the terms of the GNU Affero General Public License 3.0 (AGPL 3.0). For other licenses [contact us](mailto:info@pintle.dk).
