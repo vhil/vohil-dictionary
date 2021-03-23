@@ -248,6 +248,7 @@ The most important config file is [Pintle.Dictionary.Services.config](https://gi
           <DictionaryKeyFieldName>Key</DictionaryKeyFieldName>
           <dictionaryPhraseFieldName>Phrase</dictionaryPhraseFieldName>
           <itemCreationDatabase>master</itemCreationDatabase>
+		  <siteAwareCaches>true</siteAwareCaches>
         </settings>
         <iconSettings type="Pintle.Dictionary.DictionaryIconSettings, Pintle.Dictionary" singleInstnace="true">
           <DictionaryDomainIcon>Office/32x32/books.png</DictionaryDomainIcon>
