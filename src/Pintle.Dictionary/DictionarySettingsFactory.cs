@@ -22,7 +22,7 @@
 		public virtual DictionaryIconSettings DictionaryIconSettings 
 			=> Factory.CreateObject("pintle/dictionary/iconSettings", true) as DictionaryIconSettings;
 
-		public virtual DataAnnotationDefaultPhrases GetDefautlPhrases(string language)
+		public virtual DataAnnotationDefaultPhrases GetDefaultPhrases(string language)
 		{
 			var defaultConfigNode = "pintle/dictionary/defaultPhrases";
 

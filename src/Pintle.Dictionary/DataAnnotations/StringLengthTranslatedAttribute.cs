@@ -9,7 +9,7 @@
 	{
 		public StringLengthTranslatedAttribute(int maximumLength) : base(maximumLength)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefaultPhrases(Context.Language?.Name);
 			this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.StringLength)}";
 			this.DefaultTranslation = defaultPhrases.StringLength;
 		}

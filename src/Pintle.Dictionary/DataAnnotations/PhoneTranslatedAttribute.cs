@@ -14,7 +14,7 @@
 		public PhoneTranslatedAttribute()
 			: base(DataType.PhoneNumber)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefaultPhrases(Context.Language?.Name);
 			this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.Phone)}";
 			this.DefaultTranslation = defaultPhrases.Phone;
 		}

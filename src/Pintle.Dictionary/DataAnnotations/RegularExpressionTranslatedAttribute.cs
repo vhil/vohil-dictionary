@@ -9,7 +9,7 @@
 	{
 		public RegularExpressionTranslatedAttribute(string pattern) : base(pattern)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefaultPhrases(Context.Language?.Name);
 			this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.RegularExpression)}";
 			this.DefaultTranslation = defaultPhrases.RegularExpression;
 		}

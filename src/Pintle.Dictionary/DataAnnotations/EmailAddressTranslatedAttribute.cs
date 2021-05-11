@@ -13,7 +13,7 @@
 	{
 		public EmailAddressTranslatedAttribute() : base(DataType.EmailAddress)
 		{
-			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefautlPhrases(Context.Language?.Name);
+			var defaultPhrases = DictionarySettingsFactory.ConfiguredInstance.GetDefaultPhrases(Context.Language?.Name);
 			this.DictionaryKey = $"{Constants.DictionaryKeys.DefaultDataAnnotationsPath}/{nameof(defaultPhrases.EmailAddress)}";
 			this.DefaultTranslation = defaultPhrases.EmailAddress;
 		}
