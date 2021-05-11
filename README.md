@@ -270,6 +270,3 @@ Help us! Keep the quality of feature requests and bug reports high
 We strive to make it possible for everyone and anybody to contribute to this project. Please help us by making issues easier to resolve by providing sufficient information. Understanding the reasons behind issues can take a lot of time if information is left out.
 
 Thank you, and happy contributing!
-
-## License
-vohil-dictionary is made available under the terms of the GNU Affero General Public License 3.0 (AGPL 3.0). For other licenses [contact us](mailto:info@vohil.dk).
