@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Vohil.Dictionary")]
-[assembly: AssemblyCopyright("Copyright © Pintle ApS 2018")]
+[assembly: AssemblyCopyright("Copyright © vhil 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

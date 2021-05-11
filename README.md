@@ -1,26 +1,26 @@
-# Pintle.Dictionary
+# Vohil.Dictionary
 
-Pintle.Dictionary is a Sitecore CMS module which provides an abstracted dictionary service for Sitecore 9.x CMS.
+Vohil.Dictionary is a Sitecore CMS module which provides an abstracted dictionary service for Sitecore 9.x CMS.
 
 Functionality and features
  * designed for Sitecore 9.x CMS and later
  * uses default sitecore Translate mechanism
- * automatic dictionary phrase items creation (through [Sitecore service bus](https://www.pintle.dk/insights/using-sitecore-service-bus/))
+ * automatic dictionary phrase items creation (through [Sitecore service bus](https://vohil.net/insights/using-sitecore-service-bus/))
  * mvc helper extensions for fast access
  * code first approach for dictionary phrase items
  * experience editor support for editable dictionary phrases
 
 The module is a set of NuGet packages that can be used in your solution:
- * [Pintle.Dictionary.Core](https://www.nuget.org/packages/Pintle.Dictionary.Core "Pintle.Dictionary.Core")
- * [Pintle.Dictionary](https://www.nuget.org/packages/Pintle.Dictionary "Pintle.Dictionary")
+ * [Vohil.Dictionary.Core](https://www.nuget.org/packages/Vohil.Dictionary.Core "Vohil.Dictionary.Core")
+ * [Vohil.Dictionary](https://www.nuget.org/packages/Vohil.Dictionary "Vohil.Dictionary")
 
 # Getting started
 
 ## Install nuget packages
 
 Within helix modular architecture:
- * `Install-Package Pintle.Dictionary` nuget package for your project layer (includes config files)
- * `Install-Package Pintle.Dictionary.Core` nuget package for your feature or foundation layer module
+ * `Install-Package Vohil.Dictionary` nuget package for your project layer (includes config files)
+ * `Install-Package Vohil.Dictionary.Core` nuget package for your feature or foundation layer module
 
 ## Configuration
 
@@ -38,7 +38,7 @@ Within helix modular architecture:
 ## Using dictionary translation in Razor View:
  
 ```cs
-@using Pintle.Dictionary.Extensions
+@using Vohil.Dictionary.Extensions
 ...
 @Html.Sitecore().Dictionary().Translate("header/socialNetworks/facebook", "Facebook")
 @Html.Sitecore().Dictionary().Translate("header/socialNetworks/twitter", "Twitter", editable:true)
@@ -56,10 +56,10 @@ All phrases are automatically published to all available publishing targets.
 
 ## Using dictionary translation in class
 
-1. Inject `Pintle.Dictionary.IDictionaryService` into your class:
+1. Inject `Vohil.Dictionary.IDictionaryService` into your class:
 ```cs
 using System.Web.Mvc;
-using Pintle.Dictionary;
+using Vohil.Dictionary;
 
 public class MyController : Controller
 {
@@ -138,7 +138,7 @@ public class SignupForm
 ```html
 @using System.Web.Mvc
 @using System.Web.Mvc.Html
-@using Pintle.Dictionary.Extensions
+@using Vohil.Dictionary.Extensions
 @using Sitecore.Mvc
 @model SignupForm
 @{
@@ -220,28 +220,28 @@ Dictionary item creation is handled through Sitecore message bus (introduced in 
 ## Documentation
 
 The module is completely configuration driven and implemented with proper responsibility separation and abstraction level. Once installed, all dependencies and services can be found in Sitecore configuration files, and this is the entry point in case you need to patch it for your needs.
-The most important config file is [Pintle.Dictionary.Services.config](https://github.com/pintle/pintle-dictionary/blob/master/src/Pintle.Dictionary/App_Config/Modules/Pintle.Dictionary/Pintle.Dictionary.Services.config "Pintle.Dictionary.Services.config"):
+The most important config file is [Vohil.Dictionary.Services.config](https://github.com/vohil/vohil-dictionary/blob/master/src/Vohil.Dictionary/App_Config/Modules/Vohil.Dictionary/Vohil.Dictionary.Services.config "Vohil.Dictionary.Services.config"):
 ```xml
 <configuration xmlns:patch="http://www.sitecore.net/xmlconfig/">
   <sitecore>
-    <pintle>
+    <vohil>
       <dictionary>
-        <dictionaryService type="Pintle.Dictionary.DictionaryService, Pintle.Dictionary">
-          <param name="repository" ref="pintle/dictionary/itemRepository"/>
-          <param name="settings" ref="pintle/dictionary/settings"/>
-          <param name="cache" ref="pintle/dictionary/cache"/>
+        <dictionaryService type="Vohil.Dictionary.DictionaryService, Vohil.Dictionary">
+          <param name="repository" ref="vohil/dictionary/itemRepository"/>
+          <param name="settings" ref="vohil/dictionary/settings"/>
+          <param name="cache" ref="vohil/dictionary/cache"/>
           <param name="logger" type="Sitecore.Abstractions.BaseLog, Sitecore.Kernel" resolve="true"/>
         </dictionaryService>
-        <cache type="Pintle.Dictionary.DictionaryCache, Pintle.Dictionary" singleInstance="true">
-          <param name="cacheName">Pintle.Dictionary.Cache</param>
+        <cache type="Vohil.Dictionary.DictionaryCache, Vohil.Dictionary" singleInstance="true">
+          <param name="cacheName">Vohil.Dictionary.Cache</param>
           <param name="cacheSize">10MB</param>
         </cache>
-        <itemRepository type="Pintle.Dictionary.DictionaryItemRepository, Pintle.Dictionary">
-          <param name="settings" ref="pintle/dictionary/settings"/>
-          <param name="messageBus" type="Sitecore.Framework.Messaging.IMessageBus`1[[Pintle.Dictionary.Messaging.DictionaryMessageBus, Pintle.Dictionary]], Sitecore.Framework.Messaging.Abstractions" resolve="true"/>
+        <itemRepository type="Vohil.Dictionary.DictionaryItemRepository, Vohil.Dictionary">
+          <param name="settings" ref="vohil/dictionary/settings"/>
+          <param name="messageBus" type="Sitecore.Framework.Messaging.IMessageBus`1[[Vohil.Dictionary.Messaging.DictionaryMessageBus, Vohil.Dictionary]], Sitecore.Framework.Messaging.Abstractions" resolve="true"/>
           <param name="logger" type="Sitecore.Abstractions.BaseLog, Sitecore.Kernel" resolve="true"/>
         </itemRepository>
-        <settings type="Pintle.Dictionary.SitecoreDictionarySettings, Pintle.Dictionary" singleInstnace="true">
+        <settings type="Vohil.Dictionary.SitecoreDictionarySettings, Vohil.Dictionary" singleInstnace="true">
           <dictionaryDomainTemplateId>{0A2847E6-9885-450B-B61E-F9E6528480EF}</dictionaryDomainTemplateId>
           <dictionaryFolderTemplateId>{267D9AC7-5D85-4E9D-AF89-99AB296CC218}</dictionaryFolderTemplateId>
           <dictionaryPhraseTemplateId>{6D1CD897-1936-4A3A-A511-289A94C2A7B1}</dictionaryPhraseTemplateId>
@@ -250,13 +250,13 @@ The most important config file is [Pintle.Dictionary.Services.config](https://gi
           <itemCreationDatabase>master</itemCreationDatabase>
 		  <siteAwareCaches>true</siteAwareCaches>
         </settings>
-        <iconSettings type="Pintle.Dictionary.DictionaryIconSettings, Pintle.Dictionary" singleInstnace="true">
+        <iconSettings type="Vohil.Dictionary.DictionaryIconSettings, Vohil.Dictionary" singleInstnace="true">
           <DictionaryDomainIcon>Office/32x32/books.png</DictionaryDomainIcon>
           <DictionaryFolderIcon>Office/32x32/book2.png</DictionaryFolderIcon>
           <DictionaryPhraseIcon>Office/32x32/text_field.png</DictionaryPhraseIcon>
         </iconSettings>
       </dictionary>
-    </pintle>
+    </vohil>
   </sitecore>
 </configuration>
 ```
@@ -272,4 +272,4 @@ We strive to make it possible for everyone and anybody to contribute to this pro
 Thank you, and happy contributing!
 
 ## License
-pintle-dictionary is made available under the terms of the GNU Affero General Public License 3.0 (AGPL 3.0). For other licenses [contact us](mailto:info@pintle.dk).
+vohil-dictionary is made available under the terms of the GNU Affero General Public License 3.0 (AGPL 3.0). For other licenses [contact us](mailto:info@vohil.dk).
